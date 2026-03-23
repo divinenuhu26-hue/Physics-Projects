@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 1D Motion Simulator
 # Calculates displacement and final velocity using kinematic equations
 
@@ -36,3 +37,6 @@ if __name__ == "__main__":
     print(f"\nResults:")
     print(f"Displacement: {displacement:.2f} meters")
     print(f"Final Velocity: {final_velocity:.2f} m/s")
+=======
+print("Hello, Physics World!")
+>>>>>>> 395b9313b084b84bfea12378590fac4783b4185a
