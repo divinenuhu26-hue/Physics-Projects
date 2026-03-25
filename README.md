@@ -1,20 +1,49 @@
-# Displacement Calculator
+ 1D Motion Simulator (Kinematics)
+This project models motion in one dimension using fundamental kinematic equations. It began as a simple displacement calculator and has been expanded to simulate motion under constant acceleration.
 
-This project calculates the displacement of an object based on input parameters like initial position, final position, and time. It was created as part of my personal coding and physics projects.
+Physics Background
 
-## How to Use
+The simulator is based on standard kinematics:
 
-1. Open the project in your IDE or run the main file.
-2. Enter the required input values (initial position, final position, and time).
-3. The program outputs the displacement.
+Velocity: v = u + at
+Position: x = x₀ + ut + ½at²
 
-## Features
+These equations describe how velocity and position change over time under constant acceleration.
 
-- Handles basic displacement calculations.
-- Easy-to-use input prompts.
-- Demonstrates merging fixes and proper project organization.
+Features
+Computes position and velocity over time
+Supports constant acceleration (including gravity)
+Time-step simulation for observing motion dynamically
+Handles different motion scenarios:
+Constant velocity (a = 0)
+Accelerated motion (a > 0)
+Decelerated motion / gravity (a < 0)
+Example Use Case
 
-## Notes
+Simulating vertical motion under gravity:
 
-- This project is part of my GitHub portfolio for learning physics and programming.
-- Merge conflicts have been resolved to ensure smooth functionality.
+Initial velocity = 10 m/s
+Acceleration = -9.8 m/s²
+
+The simulator demonstrates how velocity decreases linearly over time while position follows a curved trajectory.
+
+How to Run
+Run the Python file
+Input:
+Initial position
+Initial velocity
+Acceleration
+Total time
+Time step
+Observe computed position and velocity values
+Project Evolution
+Started as a displacement calculator
+Extended to include velocity and acceleration
+Developed into a time-based motion simulator
+Future Improvements
+Graphical visualization (position-time and velocity-time graphs)
+2D projectile motion
+Air resistance modeling
+Purpose
+
+This project is part of my effort to combine physics and programming by building simulations that reflect real-world motion and deepen my understanding of mechanics.
