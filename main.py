@@ -1,40 +1,34 @@
+ # 1D Motion Simulator with Acceleration
 
-# 1D Motion Simulator
-# Calculates displacement and final velocity using kinematic equations
+def calculate_velocity(u, a, t):
+    return u + a * t
 
-def motion_simulator(u, a, t):
-    """
-    u : initial velocity (m/s)
-    a : acceleration (m/s^2)
-    t : time (s)
-    
-    Returns:
-    displacement (s) in meters
-    final velocity (v) in m/s
-    """
-    # Kinematic equations
-    v = u + a * t
-    s = u * t + 0.5 * a * t**2
-    return s, v
+def calculate_position(x0, u, a, t):
+    return x0 + u * t + 0.5 * a * t**2
 
-# Main Program 
-if __name__ == "__main__":
-    print(" Welcome to the 1D Motion Simulator")
-    
-    # Get user input
-    try:
-        u = float(input("Enter initial velocity (m/s): "))
-        a = float(input("Enter acceleration (m/s^2): "))
-        t = float(input("Enter time (s): "))
-    except ValueError:
-        print("Error: Please enter numeric values only.")
-        exit()
-    
-    # Calculate
-    displacement, final_velocity = motion_simulator(u, a, t)
-    
-    # Output
-    print(f"\nResults:")
-    print(f"Displacement: {displacement:.2f} meters")
-    print(f"Final Velocity: {final_velocity:.2f} m/s")
-print("Hello, Physics World!")
+
+def run_simulation():
+    print("=== 1D Motion Simulator ===")
+
+    # Input for values
+    x0 = float(input("Enter initial position (m): "))
+    u = float(input("Enter initial velocity (m/s): "))
+    a = float(input("Enter acceleration (m/s^2): "))
+    total_time = float(input("Enter total simulation time (s): "))
+    dt = float(input("Enter time step (e.g. 0.1): "))
+
+    print("\nTime | Position (m) | Velocity (m/s)")
+    print("-" * 40)
+
+    t = 0.0
+    while t <= total_time:
+        x = calculate_position(x0, u, a, t)
+        v = calculate_velocity(u, a, t)
+
+        print(f"{t:5.2f} | {x:12.4f} | {v:14.4f}")
+
+        t += dt
+
+
+# Run the simulation
+run_simulation()
