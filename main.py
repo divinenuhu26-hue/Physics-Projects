@@ -40,30 +40,30 @@ def run_simulation():
         velocities.append(v)
         energies.append(ke)
 
-    # ---- Position vs Time ----
-    plt.figure()
+    # ---- Combined Plots ----
+    plt.figure(figsize=(10, 8))
+
+    # Position vs Time
+    plt.subplot(3, 1, 1)
     plt.plot(t_values, positions)
-    plt.xlabel("Time (s)")
     plt.ylabel("Position (m)")
-    plt.title("Position vs Time")
+    plt.title("1D Motion Analysis")
     plt.grid()
 
-    # ---- Velocity vs Time ----
-    plt.figure()
+    # Velocity vs Time
+    plt.subplot(3, 1, 2)
     plt.plot(t_values, velocities)
-    plt.xlabel("Time (s)")
     plt.ylabel("Velocity (m/s)")
-    plt.title("Velocity vs Time")
     plt.grid()
 
-    # ---- Kinetic Energy vs Time ----
-    plt.figure()
+    # Kinetic Energy vs Time
+    plt.subplot(3, 1, 3)
     plt.plot(t_values, energies)
     plt.xlabel("Time (s)")
     plt.ylabel("Kinetic Energy (J)")
-    plt.title("Kinetic Energy vs Time")
     plt.grid()
 
+    plt.tight_layout()
     plt.show()
 
 
