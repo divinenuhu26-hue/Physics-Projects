@@ -1,90 +1,79 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Physics functions
-def calculate_position(x0, u, a, t):
-    return x0 + u*t + 0.5*a*t**2
+# PARAMETERS
+v0 = 20          # initial velocity (m/s)
+theta_deg = 45   # launch angle (degrees)
+g = 9.81         # gravity (m/s^2)
+m = 1.0          # mass (kg)
 
-def calculate_velocity(u, a, t):
-    return u + a*t
+theta = np.radians(theta_deg)
 
-def calculate_kinetic_energy(m, v):
-    return 0.5 * m * v**2
+# INITIAL VELOCITY COMPONENTS
+v0x = v0 * np.cos(theta)
+v0y = v0 * np.sin(theta)
 
-def calculate_potential_energy(m, g, h):
-    return m * g * h
+# TIME OF FLIGHT
+t_flight = (2 * v0y) / g
+t = np.linspace(0, t_flight, 500)
 
+# MOTION EQUATIONS
+x = v0x * t
+y = v0y * t - 0.5 * g * t**2
 
-def run_simulation():
-    print("=== 1D Motion Simulator with Full Energy Analysis ===")
+vx = np.full_like(t, v0x)
+vy = v0y - g * t
+ 
+# ENERGY CALCULATIONS
+KE = 0.5 * m * (vx**2 + vy**2)
+PE = m * g * y
+E_total = KE + PE
 
-    # Inputs
-    x0 = float(input("Enter initial position (m): "))
-    u = float(input("Enter initial velocity (m/s): "))
-    a = float(input("Enter acceleration (m/s^2): "))
-    m = float(input("Enter mass (kg): "))
-    g = float(input("Enter gravitational acceleration (e.g. 9.8): "))
-    total_time = float(input("Enter total time (s): "))
-    dt = float(input("Enter time step (e.g. 0.1): "))
+# PLOTTING
+plt.figure(figsize=(10, 8))
 
-    # Time values
-    t_values = np.arange(0, total_time, dt)
+# Trajectory (x vs y)
+plt.subplot(2, 2, 1)
+plt.plot(x, y)
+plt.title("Projectile Trajectory")
+plt.xlabel("x (m)")
+plt.ylabel("y (m)")
+plt.grid()
 
-    positions = []
-    velocities = []
-    kinetic_energies = []
-    potential_energies = []
-    total_energies = []
+# Velocity vs Time
+plt.subplot(2, 2, 2)
+plt.plot(t, vx, label="vx")
+plt.plot(t, vy, label="vy")
+plt.title("Velocity vs Time")
+plt.xlabel("Time (s)")
+plt.ylabel("Velocity (m/s)")
+plt.legend()
+plt.grid()
 
-    # Compute values
-    for t in t_values:
-        x = calculate_position(x0, u, a, t)
-        v = calculate_velocity(u, a, t)
+# Position vs Time
+plt.subplot(2, 2, 3)
+plt.plot(t, x, label="x")
+plt.plot(t, y, label="y")
+plt.title("Position vs Time")
+plt.xlabel("Time (s)")
+plt.ylabel("Position (m)")
+plt.legend()
+plt.grid()
 
-        ke = calculate_kinetic_energy(m, v)
-        pe = calculate_potential_energy(m, g, x)
-        total_e = ke + pe
+# Energy vs Time
+plt.subplot(2, 2, 4)
+plt.plot(t, KE, label="Kinetic Energy")
+plt.plot(t, PE, label="Potential Energy")
+plt.plot(t, E_total, label="Total Energy")
+plt.title("Energy vs Time")
+plt.xlabel("Time (s)")
+plt.ylabel("Energy (J)")
+plt.legend()
+plt.grid()
 
-        positions.append(x)
-        velocities.append(v)
-        kinetic_energies.append(ke)
-        potential_energies.append(pe)
-        total_energies.append(total_e)
+plt.tight_layout()
+plt.show()
 
-    # ---- Combined Plots ----
-    plt.figure(figsize=(10, 10))
-
-    # Position
-    plt.subplot(4, 1, 1)
-    plt.plot(t_values, positions)
-    plt.ylabel("Position (m)")
-    plt.title("1D Motion with Energy Analysis")
-    plt.grid()
-
-    # Velocity
-    plt.subplot(4, 1, 2)
-    plt.plot(t_values, velocities)
-    plt.ylabel("Velocity (m/s)")
-    plt.grid()
-
-    # Energies
-    plt.subplot(4, 1, 3)
-    plt.plot(t_values, kinetic_energies, label="Kinetic Energy")
-    plt.plot(t_values, potential_energies, label="Potential Energy")
-    plt.ylabel("Energy (J)")
-    plt.legend()
-    plt.grid()
-
-    # Total Energy
-    plt.subplot(4, 1, 4)
-    plt.plot(t_values, total_energies)
-    plt.xlabel("Time (s)")
-    plt.ylabel("Total Energy (J)")
-    plt.grid()
-
-    plt.tight_layout()
-    plt.show()
-
-
-if __name__ == "__main__":
-    run_simulation()
+# ENERGY VALIDATION
+energy_drift = np.max(E_total) - np.min(E_total)
+print("Max Energy Drift:", energy_drift)
