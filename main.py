@@ -32,21 +32,33 @@ y_vals = []
 vx_vals = []
 vy_vals = []
 
-# SIMULATION LOOP (Euler Method)
-while y >= 0:
+def derivatives(vx, vy):
     v = np.sqrt(vx**2 + vy**2)
-
     ax = -k * v * vx
     ay = -g - k * v * vy
+    return ax, ay
 
-    vx += ax * dt
-    vy += ay * dt
+# SIMULATION LOOP (RK4 Method)
+while y >= 0:
+    # RK4 for velocity
+    ax1, ay1 = derivatives(vx, vy)
+    ax2, ay2 = derivatives(vx + 0.5*dt*ax1, vy + 0.5*dt*ay1)
+    ax3, ay3 = derivatives(vx + 0.5*dt*ax2, vy + 0.5*dt*ay2)
+    ax4, ay4 = derivatives(vx + dt*ax3, vy + dt*ay3)
 
+    vx += (dt/6) * (ax1 + 2*ax2 + 2*ax3 + ax4)
+    vy += (dt/6) * (ay1 + 2*ay2 + 2*ay3 + ay4)
+
+    # Update positions
     x += vx * dt
     y += vy * dt
-
     t += dt
 
+    # Stop exactly at ground level
+    if y < 0:
+        break
+
+    # Save values
     t_vals.append(t)
     x_vals.append(x)
     y_vals.append(y)
@@ -71,7 +83,7 @@ plt.figure(figsize=(10, 8))
 # Trajectory
 plt.subplot(2, 2, 1)
 plt.plot(x_vals, y_vals)
-plt.title("Trajectory with Air Resistance")
+plt.title("Trajectory with Air Resistance (RK4)")
 plt.xlabel("x (m)")
 plt.ylabel("y (m)")
 plt.grid()
