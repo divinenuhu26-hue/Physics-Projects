@@ -39,31 +39,44 @@ def derivatives(vx, vy):
     return ax, ay
 
 # SIMULATION LOOP (RK4 Method)
-while y >= 0:
+while True:
+    # Save current state
+    t_vals.append(t)
+    x_vals.append(x)
+    y_vals.append(y)
+    vx_vals.append(vx)
+    vy_vals.append(vy)
+
     # RK4 for velocity
     ax1, ay1 = derivatives(vx, vy)
     ax2, ay2 = derivatives(vx + 0.5*dt*ax1, vy + 0.5*dt*ay1)
     ax3, ay3 = derivatives(vx + 0.5*dt*ax2, vy + 0.5*dt*ay2)
     ax4, ay4 = derivatives(vx + dt*ax3, vy + dt*ay3)
 
-    vx += (dt/6) * (ax1 + 2*ax2 + 2*ax3 + ax4)
-    vy += (dt/6) * (ay1 + 2*ay2 + 2*ay3 + ay4)
+    vx_new = vx + (dt/6) * (ax1 + 2*ax2 + 2*ax3 + ax4)
+    vy_new = vy + (dt/6) * (ay1 + 2*ay2 + 2*ay3 + ay4)
 
-    # Update positions
-    x += vx * dt
-    y += vy * dt
-    t += dt
+    x_new = x + vx_new * dt
+    y_new = y + vy_new * dt
+    t_new = t + dt
 
-    # Stop exactly at ground level
-    if y < 0:
+    # Check if projectile crosses ground
+    if y_new < 0:
+        # Linear interpolation to find exact landing point
+        frac = y / (y - y_new)   # fraction between last y and new y
+        x_land = x + frac * (x_new - x)
+        t_land = t + frac * (t_new - t)
+
+        # Append landing point at y=0
+        t_vals.append(t_land)
+        x_vals.append(x_land)
+        y_vals.append(0.0)
+        vx_vals.append(vx_new)
+        vy_vals.append(vy_new)
         break
 
-    # Save values
-    t_vals.append(t)
-    x_vals.append(x)
-    y_vals.append(y)
-    vx_vals.append(vx)
-    vy_vals.append(vy)
+    # Update state
+    vx, vy, x, y, t = vx_new, vy_new, x_new, y_new, t_new
 
 # Convert to arrays
 t_vals = np.array(t_vals)
@@ -83,7 +96,7 @@ plt.figure(figsize=(10, 8))
 # Trajectory
 plt.subplot(2, 2, 1)
 plt.plot(x_vals, y_vals)
-plt.title("Trajectory with Air Resistance (RK4)")
+plt.title("Trajectory with Air Resistance (RK4 + Interpolation)")
 plt.xlabel("x (m)")
 plt.ylabel("y (m)")
 plt.grid()
